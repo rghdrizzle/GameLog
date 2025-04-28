@@ -9,6 +9,4 @@ func main(){
 	app := fiber.New()
 	routes.UserRoutes(app)
 	app.Listen(":3333")
-
-
 }
