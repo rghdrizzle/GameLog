@@ -28,3 +28,7 @@ func GetRecommendedGames(c *fiber.Ctx) error {
 	return c.JSON(games)
 	
 }
+
+func Recommender(){
+
+}

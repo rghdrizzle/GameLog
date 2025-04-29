@@ -1,0 +1,26 @@
+FROM golang:alpine3.20 AS build
+
+WORKDIR /usr/src/app
+
+RUN apk --no-cache add ca-certificates
+
+COPY go.mod ./
+
+RUN go mod download
+
+COPY . .
+
+RUN go build -o gameLog
+
+
+FROM scratch as runtime
+
+
+COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=build /usr/src/app/gameLog ./
+
+EXPOSE 3333
+CMD [ "./gameLog" ]
+
+
+
