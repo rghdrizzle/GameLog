@@ -3,7 +3,9 @@ package controllers
 import (
 	//"encoding/json"
 	"rghdrizzle/gameLog/model"
-
+	"github.com/Henry-Sarabia/igdb"
+	"log"
+	"fmt"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -25,9 +27,30 @@ func GetRecommendedGames(c *fiber.Ctx) error {
 	for i:=0; i<6; i++{
 		games = append(games,testGame)
 	}
+	GetIGDBClient()
 	return c.JSON(games)
 	
 }
+func SearchGameDatabaseBasedOnText(searchText string) {
+
+}
+
+func GetIGDBClient()*igdb.Client{
+	client:= igdb.NewClient("",nil)
+
+	games, err := client.Games.Search("zelda")
+	if err!=nil{
+		log.Fatal(err)
+	}
+
+	for _, game := range games{
+		name := game.Name
+		fmt.Printf(name)
+	}
+
+	return client
+}
+
 
 func Recommender(){
 
