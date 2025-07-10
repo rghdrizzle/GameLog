@@ -2,10 +2,13 @@ package controllers
 
 import (
 	//"encoding/json"
-	"rghdrizzle/gameLog/model"
-	"github.com/Henry-Sarabia/igdb"
-	"log"
 	"fmt"
+	"log"
+	"net/http"
+	"rghdrizzle/gameLog/model"
+	igdbapi "rghdrizzle/gameLog/pkg/igdb-api"
+
+	"github.com/Henry-Sarabia/igdb"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -36,8 +39,9 @@ func SearchGameDatabaseBasedOnText(searchText string) {
 }
 
 func GetIGDBClient()*igdb.Client{
-	client:= igdb.NewClient("",nil)
-
+	c := &http.Client{}
+	client:= igdb.NewClient("",c)
+	igdbapi
 	games, err := client.Games.Search("zelda")
 	if err!=nil{
 		log.Fatal(err)
