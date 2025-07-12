@@ -7,4 +7,5 @@ import (
 
 func UserRoutes(app *fiber.App){
 	app.Get("/Recommended",controllers.GetRecommendedGames)
+	app.Get("/Search",controllers.SearchGameDatabaseBasedOnText)
 }

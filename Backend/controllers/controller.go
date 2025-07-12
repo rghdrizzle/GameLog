@@ -1,16 +1,23 @@
 package controllers
 
 import (
-	//"encoding/json"
-	"fmt"
-	"log"
-	"net/http"
+	// //"encoding/json"
+	// "fmt"
+	// "log"
+	// "net/http"
 	"rghdrizzle/gameLog/model"
 	igdbapi "rghdrizzle/gameLog/pkg/igdb-api"
-
-	"github.com/Henry-Sarabia/igdb"
+	"os"
 	"github.com/gofiber/fiber/v2"
+	"encoding/json"
+	"log"
 )
+var client_id = os.Getenv("IGDB_CLIENT_ID")
+var client_secret = os.Getenv("IGDB_SECRED")
+
+
+
+var client = igdbapi.NewClient(client_id,client_secret)
 
 
 func GetRecommendedGames(c *fiber.Ctx) error {
@@ -30,30 +37,40 @@ func GetRecommendedGames(c *fiber.Ctx) error {
 	for i:=0; i<6; i++{
 		games = append(games,testGame)
 	}
-	GetIGDBClient()
 	return c.JSON(games)
 	
 }
-func SearchGameDatabaseBasedOnText(searchText string) {
+func SearchGameDatabaseBasedOnText(c *fiber.Ctx) error {
+	searchText := c.Query("searchText")
+	result := client.Search(searchText)
 
-}
+	var igdb_search_result []interface{}
 
-func GetIGDBClient()*igdb.Client{
-	c := &http.Client{}
-	client:= igdb.NewClient("",c)
-	igdbapi
-	games, err := client.Games.Search("zelda")
-	if err!=nil{
+	if err := json.Unmarshal(result, &igdb_search_result); err != nil {
 		log.Fatal(err)
 	}
 
-	for _, game := range games{
-		name := game.Name
-		fmt.Printf(name)
-	}
+	return c.JSON(igdb_search_result)
 
-	return client
+
+
+
 }
+
+// func GetIGDBClient(){
+// 	client := igdbapi.NewClient(")
+// 	// games, err := client.Games.Search("zelda")
+// 	// if err!=nil{
+// 	// 	log.Fatal(err)
+// 	// }
+
+// 	// for _, game := range games{
+// 	// 	name := game.Name
+// 	// 	fmt.Printf(name)
+// 	// }
+// 	_ = client
+// 	// return client
+// }
 
 
 func Recommender(){
